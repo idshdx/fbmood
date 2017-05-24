@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html data-ng-app="app">
+
+  <head>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="lib/angular-facebook.js"></script>
+    <script src="lib/app.js"></script>
+    <script src="lib/emotionlib.js"></script>
+
+  </head>
+
+  <body ng-controller="loginCtrl">
+    <button type="button" id="login" ng-click="login()">login</button>
+    <button type="button" id="api" ng-click="api()">api user data call</button>
+    <button type="button" id="remove_auth" ng-click="removeAuth()">remove auth</button>
+    <pre>isReady: <span id="is_ready" ng-bind="facebookIsReady"></span></pre>
+    <pre>status: <span id="login_status" ng-bind="loginStatus"></span></pre>
+    <pre>username: <span id="api_first_name" ng-bind="user.name"></span></pre>
+  </body>
+
+</html>

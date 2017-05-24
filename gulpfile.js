@@ -69,16 +69,16 @@ gulp.task('test-dev', function(cb) {
   }, cb);
 });
 
-gulp.task('prepare-testapp', function () {
+gulp.task('prepare-app', function () {
   gulp.src([
     './bower_components/**',
     './lib/**',
   ], {
     base: '.'
-  }).pipe(gulp.dest('./testapp'));
+  }).pipe(gulp.dest('./app'));
 
   connect.server({
-    root: 'testapp',
+    root: 'app',
     port: 3333
   });
 });
