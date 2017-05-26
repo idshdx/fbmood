@@ -27,37 +27,6 @@ angular.module('app', ['facebook'])
                 });
             });
         };
-        // function proccessEmotions(photosUrls){
-        //   var request = new XMLHttpRequest();
-        //
-        //   request.open('POST', 'https://api.kairos.com/v2/media?source=http%3A%2F%2Fmedia.kairos.com%2Ftest.flv');
-        //
-        //   request.setRequestHeader('app_id', 'a8e72acf');
-        //   request.setRequestHeader('app_key', 'b1aae070b192af17bee2c735119fb7a2');
-        //
-        //   request.onreadystatechange = function () {
-        //     if (this.readyState === 4) {
-        //       console.log('Status:', this.status);
-        //       console.log('Headers:', this.getAllResponseHeaders());
-        //       console.log('Body:', this.responseText);
-        //
-        //       request.open('GET', 'https://api.kairos.com/v2/media/22642fb654a5f30befd4f297');
-        //       request.setRequestHeader('app_id', 'a8e72acf');
-        //       request.setRequestHeader('app_key', 'b1aae070b192af17bee2c735119fb7a2');
-        //
-        //       request.onreadystatechange = function () {
-        //         if (this.readyState === 4) {
-        //           console.log('Status:', this.status);
-        //           console.log('Headers:', this.getAllResponseHeaders());
-        //           console.log('Body:', this.responseText);
-        //         }
-        //       }
-        //       request.send();
-        //     }
-        //   };
-        //
-        //   request.send();
-        // }
         var K_VERSION                   = "1.0";
         var K_SERVICE_URL               = "http://api.sightcorp.com/api/detect/";
         var K_FORM_IMG_FIELD_NAME       = "img";
@@ -67,6 +36,7 @@ angular.module('app', ['facebook'])
         var K_FORM_ATTRIBUTE_FIELD_NAME = "attribute";
 
         function emotionRequest(img, onSuccessCallback, onFailureCallback ) {
+            console.log(img.length);
             var ajaxRequest = new XMLHttpRequest();
 
             ajaxRequest.open( "POST", K_SERVICE_URL, true);
@@ -78,7 +48,9 @@ angular.module('app', ['facebook'])
 
             //ajaxRequest.setData()
             var formData = new FormData(); //API only accepts multipart/form-data content types
-            formData.append( 'img',       img);
+            var imgBlob = new Blob([ img ], { type: "image/jpeg" } );
+            //var test = URL.createObjectURL(imgBlob);
+            formData.append( 'img',       imgBlob);
             formData.append( 'client_id', K_FORM_CLIENT_ID_FIELD_NAME );
             formData.append( 'app_key', K_FORM_APP_KEY_FIELD_NAME );
 
@@ -139,16 +111,18 @@ angular.module('app', ['facebook'])
                     /* handle the result */
                     //console.log(response);
                     var pictures = response.data;  //response.data[0].source
-                    //getFbPicturesUrl(pictures);
-                    /*console.log(typeof(pictures));
-                    console.log(pictures); //.source
-*/
+                    console.log(pictures[0].source);
+
                     //emotionRequest('https://facebook.com/844e29d86c1841db54d33ef5');
 
-                    $http.get(pictures[0].source)
+                    $http({
+                        method: 'GET',
+                        url: pictures[0].source,
+                        responseType: 'arraybuffer'
+                        })
                         .then(function(response){
                             //var jpeg = btoa(response.data);
-                            //console.log(response.data);
+                            console.log(response.data.length);
                             emotionRequest(response.data);
                         },
                         function(err){
@@ -156,7 +130,7 @@ angular.module('app', ['facebook'])
                         });
                     //dataURItoBlob(pictures[0].source);
 
-                    
+
 
                 } else {
                     console.log(response.error);
